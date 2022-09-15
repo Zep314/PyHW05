@@ -1,8 +1,10 @@
 # Создайте программу для игры в ""Крестики-нолики"".
 
+import botAI
+
 # Хранить все будем в одномерном массиве
 field = '123456789'
-3
+
 def PrintField(local_field): # функция печати состояния игрового поля
     print('-' * 13)
     for i in range(3): # печатаем целыми строками
@@ -40,15 +42,36 @@ print(' Крестики - нолики (без ИИ, играют только 
 game_result = 'None'
 x_turn = True # Х - ходят первые
 
+# настройка игры - это надо как то встроить в бота - изначальный выбор параметров
+x_turn = True # Х - ходят первые
+bot_play_X = False # Бот играет за O
+bot_algorithm = 3 # Алгоритм игры бота
+                  # 1 - тупо выбирает первую свободную ячейку
+                  # 2 - случайно выбирает одну из свободных ячеек
+                  # 3 - считает все поле, не может проиграть
+xturn = True if input("X - ходят первые? [y/n]") == 'y' else False
+bot_play_X = False if input("Бот играет за 0? [y/n]") == 'y' else True
+print("Выберрите алгоритм игры:")
+print(f"\t1. Самый тупой")
+print(f"\t2. Случайный")
+print(f"\t3. Непобедимый")
+bot_algorithm = int(input("Номер алгоритма (1, 2 или 3): "))
+
 while game_result == 'None':
     PrintField(field)
     if x_turn:
         print('Ходят X')
-        field = field.replace(MyInput(field),'X')
+        if bot_play_X:
+            field = field.replace(botAI.get_bot_turn(field,'X',bot_algorithm),'X') # бот сходил за X
+        else:
+            field = field.replace(MyInput(field),'X') # чел сходил за X
     else:
         print('Ходят O')
-        field = field.replace(MyInput(field),'O')
-    game_result = MyCheckGame(field)
+        if not bot_play_X:
+            field = field.replace(botAI.get_bot_turn(field,'O',bot_algorithm),'O') # бот сходил за O
+        else:
+            field = field.replace(MyInput(field),'O') # чел сходил за O    game_result = MyCheckGame(field)
+    game_result = MyCheckGame(field)  # проверяем, чего там с результатом игры
     x_turn = not x_turn
 
 print('Игра окончена')
