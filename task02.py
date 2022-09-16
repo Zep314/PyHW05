@@ -6,3 +6,60 @@
 
 # a) Добавьте игру против бота
 # b) Подумайте как наделить бота ""интеллектом""
+
+# Параметры
+# Сколько конфет в куче
+heap = 2021
+
+# Сколько максимально конфет можно взять за один ход
+one_turn = 28
+
+
+def bot_turn(h,t):
+    ret = 0
+    if h > t:
+        ret = h % (t + 1)
+        if ret == 0: return 1 # нас ведут к проигышу, но мы надеемся...
+        else: return ret # тут у нас выйгрышный вариант
+    else: return h # берем последние конфеты
+
+print('Игра "Конфетный бот"')
+print('Правила игры:')
+print('')
+print(f'Играют 2 игрока. Есть куча из {heap} конфет. Нужно по-очереди брать из этой кучи')
+print(f'конфеты от 1 до {one_turn} штук. Пропускать ход нельзя.')
+print('Выигрывает тот, кто заберет последнюю конфету')
+
+print('Кто будет ходить первым?')
+print('1 - Бот, 2 - Человек')
+num = int(input('Введите 1 или 2: '))
+while not (num in [1,2]):
+    print('Вы ввели неправильное число.')
+    num = int(input('Введите 1 или 2: '))
+
+bot_move = False
+
+if  num == 1: bot_move = True
+
+bot_win = True
+while heap > 0:
+    print('')
+    print(f'Сейчас в куче {heap} конфет')
+    if bot_move:
+        turn = bot_turn(heap,one_turn)
+        print(f'Мой ход. Я возьму {turn} штук(и).')
+    else:
+        print('Сколько конфет Вы берете?')
+        turn = int(input(f'Возьмите от 1 до {one_turn} конфет: '))
+        while not (0 < turn and turn<= one_turn):
+            print('Вы ввели неправильное число.')
+            turn = int(input(f'Возьмите от 1 до {one_turn} конфет: '))
+    heap -= turn
+    if heap < 1:
+        if not bot_move: bot_win = False
+        break
+    bot_move = not bot_move
+
+print('В куче больше нет конфет.')
+if bot_win: print('Я победил! Я счастлив!')
+else: print('Я проиграл. Я в печали...')

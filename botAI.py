@@ -37,8 +37,8 @@ def i_can_win(local_field, my_char):
                local_field[win_patterns[i][2]]
                for i in range(len(win_patterns))]  # список заполненных верт, гориз и диагоналей
     k = ''
-    for i in range(len(triples)):  # проверка тройки символов на то, что одного из ни нехватает
-        # для полного заполнения
+    for i in range(len(triples)):  # проверка тройки символов на то, что одного из не нехватает
+                                   # для полного заполнения
         k = win_triple(triples[i], my_char)
         if k:
             break
@@ -50,10 +50,7 @@ def mega_brain(local_field: str, my_char):
     if ret:
         return ret  # можем!
 
-    if my_char == 'X':
-        alien_char = 'O'
-    else:
-        alien_char = 'X'
+    alien_char = ('O' if my_char == 'X' else 'X')
 
     # проверяем, может ли враг победить одним ходом
     ret = i_can_win(local_field, alien_char)
